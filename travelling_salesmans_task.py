@@ -101,8 +101,8 @@ def find_remaining_edges(mat: np.array, current: Plan) -> Plan:
     return current
 
 
-# The function which makes array of id from array of PairPonts
-def do_array_id(lst_edges: list, id1: int):
+# The function which makes array of id from array of PairPoints
+'''def do_array_id(lst_edges: list, id1: int):
     first_id = id1
     result = [int(id1)]
     while len(lst_edges) > 0:
@@ -114,7 +114,7 @@ def do_array_id(lst_edges: list, id1: int):
                 break
         if id1 == first_id:  # temporarily -> find_remaining_edges??????????
             break
-    return result
+    return result'''
 
 
 # The function, which makes right list of track points
