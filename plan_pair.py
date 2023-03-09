@@ -24,7 +24,7 @@ class Plan:
 
     def __copy__(self):
         return Plan(self.mat.copy(), self.lower_limit,
-                    self.lst_edges.copy())
+                    self.lst_edges.copy(), self.track.copy())
 
     # Compare operands:
     def __verify_data(cls, other):
