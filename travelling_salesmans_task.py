@@ -37,22 +37,6 @@ def arr_index(mat: np.array, edge_id: list) -> list[int]:
 
 
 # Branching: exclusion and inclusion of an edge
-
-'''def without_cycle(plan: Plan, j: int):
-    j_mat = plan.mat[0, j]
-    j_back, copy_j = -1, j_mat
-    while True:
-        other_j = j_mat
-        for k in range(len(plan.lst_edges)):
-            if plan.lst_edges[k].id2 == j:
-                j_back = plan.lst_edges[k].id1
-                plan.mat[arr_index(plan.mat, [copy_j, j_back])[0], arr_index(plan.mat, [copy_j, j_back])[1]] = np.inf
-                j = j_back
-                break
-        if other_j == j:
-            break'''
-
-
 def exclude_edge(plan: Plan, i: int, j: int):
     plan.mat[i, j] = np.inf
     lower_limit = line_reduction(plan.mat)
@@ -69,7 +53,6 @@ def include_edge(plan: Plan, i: int, j: int):
     i_index = arr_index(plan.mat, [plan.mat[0, j], plan.mat[i, 0]])[0]
     j_index = arr_index(plan.mat, [plan.mat[0, j], plan.mat[i, 0]])[1]
     plan.mat[i_index, j_index] = np.inf
-    'without_cycle(plan, j)'
     plan.mat = np.delete(plan.mat, i, 0)
     plan.mat = np.delete(plan.mat, j, 1)
     lower_limit = line_reduction(plan.mat)
@@ -80,6 +63,14 @@ def include_edge(plan: Plan, i: int, j: int):
 def include_edge_limit(plan: Plan, i: int, j: int):
     include_edge(plan, i, j)
     return plan.lower_limit
+
+
+# The function, which helps to avoid infinity cycles in track
+def avoid_cycle(plan: Plan):
+    for k in range(len(plan.track) - 1, -1, -1):
+        for i in range(k - 2, -1, -1):
+            plan.mat[arr_index(plan.mat, [plan.track[k], plan.track[i]])[0],
+            arr_index(plan.mat, [plan.track[k], plan.track[i]])[1]] = np.inf
 
 
 # Comparing current and ragged branches to choosing one with min lower limit
@@ -110,8 +101,8 @@ def find_remaining_edges(mat: np.array, current: Plan) -> Plan:
     return current
 
 
-# The function which makes array of id from array of PairPonts
-def do_array_id(lst_edges: list, id1: int):
+# The function which makes array of id from array of PairPoints
+'''def do_array_id(lst_edges: list, id1: int):
     first_id = id1
     result = [int(id1)]
     while len(lst_edges) > 0:
@@ -123,15 +114,23 @@ def do_array_id(lst_edges: list, id1: int):
                 break
         if id1 == first_id:  # temporarily -> find_remaining_edges??????????
             break
-    return result
+    return result'''
+
+
+# The function, which makes right list of track points
+def make_list_points(current: Plan, first_id: int):
+    current.do_array_ids()
+    current.make_right_order(first_id)
 
 
 # The functions, which does the Little's algorythm
 def do_new_plan(current: Plan, i: int, j: int, is_less_inc: bool):
-    branch = Plan(current.mat.copy(), current.lower_limit, current.lst_edges)
+    branch = Plan(current.mat.copy(), current.lower_limit, current.lst_edges, current.track)
     branch.app(PairPoints(branch.mat[i, 0], branch.mat[0, j], is_less_inc))
+    branch.do_array_ids()
     if is_less_inc:
         include_edge(branch, i, j)
+        avoid_cycle(branch)
     else:
         exclude_edge(branch, i, j)
     line_reduction(branch.mat)
@@ -141,24 +140,24 @@ def do_new_plan(current: Plan, i: int, j: int, is_less_inc: bool):
 
 def travel_salesmans_task(dist_matrix: np.array):
     ragged_branches = []
+    id_first = dist_matrix[0, 1]
     line_lim = line_reduction(dist_matrix)
     col_lim = column_reduction(dist_matrix)
     current_plan = Plan(dist_matrix, line_lim + col_lim, [])
-    id_first = current_plan.mat[0, 1]
     while len(dist_matrix) > 3:
         edge_index = find_degrees_of_zeros(dist_matrix)
         i, j = arr_index(dist_matrix, edge_index)[0][0], arr_index(dist_matrix, edge_index)[1][0]
         exc_lim = exclude_edge_limit(current_plan.__copy__(), i, j)
         inc_lim = include_edge_limit(current_plan.__copy__(), i, j)
 
-        ragged_branch = do_new_plan(current_plan.__copy__(), i, j, inc_lim >= exc_lim)
-        current_plan = do_new_plan(current_plan, i, j, inc_lim < exc_lim)
-        
+        ragged_branch = do_new_plan(current_plan.__copy__(), i, j, inc_lim > exc_lim)
+        current_plan = do_new_plan(current_plan, i, j, inc_lim <= exc_lim)
+
         ragged_branches.append(ragged_branch)
         current_plan = ragged_branches_compare(ragged_branches, current_plan)
         dist_matrix = current_plan.mat.copy()
 
     current_plan = find_remaining_edges(dist_matrix, current_plan)
-    return do_array_id(current_plan.lst_edges, id_first)
-
-
+    make_list_points(current_plan, id_first)
+    return current_plan.track
+    # return do_array_id(current_plan.lst_edges, id_first)
