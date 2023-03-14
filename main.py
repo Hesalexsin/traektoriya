@@ -5,19 +5,22 @@ from travelling_salesmans_task import travel_salesmans_task
 from edges import make_array
 from formating import make_points, make_json_data
 from draw_track import draw_track
+import logging
+import logging.config
 
 # main function
 if __name__ == '__main__':
+    logging.config.fileConfig('logconfig.ini')
+    logging.getLogger().level = logging.INFO
     filename = 'input.json'
-    data = make_json_data(filename)
-    print(data)
-    a = make_array(data.get('data_points'))
-    print(a)
+    data = make_json_data(filename).get('data_points')
+    logging.debug(f"Read data: \n {data} \n")
+    points = make_points(data)
+    a = make_array(points)
+    logging.debug(f"Made array: \n {a} \n")
     sequence = travel_salesmans_task(a)
-    points = make_points(data.get('data_points'), len(data.get('data_points')))
-    print(points.get(1001))
 
-    print(sequence)
+    logging.debug(f"Formed sequence: \n {sequence} \n")
     draw_track(points, sequence)
 
     # print()
