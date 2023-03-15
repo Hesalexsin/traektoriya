@@ -44,11 +44,12 @@ def distance(dot1: dict, dot2: dict):
     r12 = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
     return r12
 
-
+# calculating length of edges allow intersections with FLs (need strategy of realisation)
 def update_edges_with_fl(a: np.array, n: int, points: dict, data_forbidden_lines):
     pass
 
 
+# checking intersections of one of the edges and one of the FLs (need more compact func)
 def is_intersect(dot1: dict, dot2: dict, dot3: dict, dot4: dict):
     x1 = dot1.get('x')
     x2 = dot2.get('x')
@@ -71,7 +72,7 @@ def is_intersect(dot1: dict, dot2: dict, dot3: dict, dot4: dict):
     else:
         return False
 
-
+# checks the orientation of triples of points (reformat to more compact func)
 def check_orientation(dot1: dict, dot2: dict, dot3: dict):
     x1 = dot1.get('x')
     y1 = dot1.get('y')
