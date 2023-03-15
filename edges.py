@@ -36,10 +36,53 @@ def fill_array(a: np.array, n: int, points: dict):
 
 
 # calculating distance between points using the pythagorean theorem
-def distance(dot1:dict, dot2:dict):
+def distance(dot1: dict, dot2: dict):
     x1 = dot1.get('x')
     y1 = dot1.get('y')
     x2 = dot2.get('x')
     y2 = dot2.get('y')
     r12 = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
     return r12
+
+
+def update_edges_with_fl(a: np.array, n: int, points: dict, data_forbidden_lines):
+    pass
+
+
+def is_intersect(dot1: dict, dot2: dict, dot3: dict, dot4: dict):
+    x1 = dot1.get('x')
+    x2 = dot2.get('x')
+    x3 = dot3.get('x')
+    x4 = dot4.get('x')
+    orient1 = check_orientation(dot1, dot2, dot3)
+    orient2 = check_orientation(dot1, dot2, dot4)
+    orient3 = check_orientation(dot3, dot4, dot1)
+    orient4 = check_orientation(dot3, dot4, dot2)
+    if orient1 != orient2 and orient3 != orient4:
+        return True
+    elif orient1 == 0 and ((x1 > x3 > x2) or (x1 < x3 < x2)):
+        return True
+    elif orient2 == 0 and ((x1 > x4 > x2) or (x1 < x4 < x2)):
+        return True
+    elif orient3 == 0 and ((x3 > x1 > x4) or (x3 < x1 < x4)):
+        return True
+    elif orient4 == 0 and ((x3 > x2 > x4) or (x3 < x2 < x4)):
+        return True
+    else:
+        return False
+
+
+def check_orientation(dot1: dict, dot2: dict, dot3: dict):
+    x1 = dot1.get('x')
+    y1 = dot1.get('y')
+    x2 = dot2.get('x')
+    y2 = dot2.get('y')
+    x3 = dot3.get('x')
+    y3 = dot3.get('y')
+    orient = (y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2)
+    if orient > 0:
+        return 1
+    elif orient < 0:
+        return -1
+    else:
+        return 0

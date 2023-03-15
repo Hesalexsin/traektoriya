@@ -13,15 +13,19 @@ if __name__ == '__main__':
     logging.config.fileConfig('logconfig.ini')
     logging.getLogger().level = logging.INFO
     filename = 'input.json'
-    data = make_json_data(filename).get('data_points')
-    logging.debug(f"Read data: \n {data} \n")
-    points = make_points(data)
+    data =  make_json_data(filename)
+    data_points = data.get('data_points')
+    data_forbidden_lines = data.get('forbidden_lines')
+
+    logging.debug(f"Read data: \n {data_points} \n")
+    points = make_points(data_points)
     a = make_array(points)
+    #a = update_edges_with_fl(a, data_forbidden_lines)
     logging.debug(f"Made array: \n {a} \n")
     sequence = travel_salesmans_task(a)
 
     logging.debug(f"Formed sequence: \n {sequence} \n")
-    draw_track(points, sequence)
+    draw_track(points, sequence, data_forbidden_lines)
 
     # print()
 
