@@ -1,18 +1,42 @@
 import numpy as np
 from plan_pair import PairPoints, Plan
 
+import logging
+import logging.config
+
+# Constructing loggers:
+'''logging.config.fileConfig('logconfig_algorithm.ini')'''
+
+logging.basicConfig(
+    filename='algorithm.log',
+    level=logging.INFO,
+    format='%(levelname)s:%(funcName)s:%(name)s:%(message)s'
+)
+
 
 # These functions find minimal values in lines/columns and subtract them from the lines/columns
 def line_reduction(mat: np.array):
     summ_min = mat[1:, 1:].min(axis=1).sum()
-    mat[1:, 1:] = mat[1:, 1:] - mat[1:, 1:].min(axis=1)[:, np.newaxis]
+    mat[1:, 1:] -= mat[1:, 1:].min(axis=1)[:, np.newaxis]
     return summ_min
 
 
 def column_reduction(mat: np.array):
     summ_min = mat[1:, 1:].min(axis=0).sum()
-    mat[1:, 1:] = mat[1:, 1:] - mat[1:, 1:].min(axis=0)
+    mat[1:, 1:] -= mat[1:, 1:].min(axis=0)
     return summ_min
+
+
+'''def line_reduction(plan: Plan):
+    summ_min = plan.mat[1:, 1:].min(axis=1).sum()
+    plan.mat[1:, 1:] -= plan.mat[1:, 1:].min(axis=1)[:, np.newaxis]
+    plan.inc_limit(summ_min)
+
+
+def column_reduction(plan: Plan):
+    summ_min = plan.mat[1:, 1:].min(axis=0).sum()
+    plan.mat[1:, 1:] -= plan.mat[1:, 1:].min(axis=0)
+    plan.inc_limit(summ_min)'''
 
 
 # Finding of the biggest degrees of zeros and choosing of the edge
@@ -101,22 +125,6 @@ def find_remaining_edges(mat: np.array, current: Plan) -> Plan:
     return current
 
 
-# The function which makes array of id from array of PairPoints
-'''def do_array_id(lst_edges: list, id1: int):
-    first_id = id1
-    result = [int(id1)]
-    while len(lst_edges) > 0:
-        for i in range(len(lst_edges)):
-            if id1 == lst_edges[i].id1:
-                result.append(int(lst_edges[i].id2))
-                id1 = lst_edges[i].id2
-                lst_edges.pop(i)
-                break
-        if id1 == first_id:  # temporarily -> find_remaining_edges??????????
-            break
-    return result'''
-
-
 # The function, which makes right list of track points
 def make_list_points(current: Plan, first_id: int):
     current.do_array_ids()
@@ -125,7 +133,7 @@ def make_list_points(current: Plan, first_id: int):
 
 # The functions, which does the Little's algorythm
 def do_new_plan(current: Plan, i: int, j: int, is_less_inc: bool):
-    branch = Plan(current.mat.copy(), current.lower_limit, current.lst_edges, current.track)
+    branch = current.__copy__()
     branch.app(PairPoints(branch.mat[i, 0], branch.mat[0, j], is_less_inc))
     branch.do_array_ids()
     if is_less_inc:
@@ -133,17 +141,19 @@ def do_new_plan(current: Plan, i: int, j: int, is_less_inc: bool):
         avoid_cycle(branch)
     else:
         exclude_edge(branch, i, j)
-    line_reduction(branch.mat)
-    column_reduction(branch.mat)
+    '''line_reduction(branch.mat)
+    column_reduction(branch.mat)'''
+
+    logging.info('The plan is made')
     return branch
 
 
-def travel_salesmans_task(dist_matrix: np.array):
+def travel_salesman_problem(dist_matrix: np.array):
     ragged_branches = []
     id_first = dist_matrix[0, 1]
     line_lim = line_reduction(dist_matrix)
     col_lim = column_reduction(dist_matrix)
-    current_plan = Plan(dist_matrix, line_lim + col_lim, [])
+    current_plan = Plan(dist_matrix, line_lim + col_lim)
     while len(dist_matrix) > 3:
         edge_index = find_degrees_of_zeros(dist_matrix)
         i, j = arr_index(dist_matrix, edge_index)[0][0], arr_index(dist_matrix, edge_index)[1][0]
@@ -157,7 +167,8 @@ def travel_salesmans_task(dist_matrix: np.array):
         current_plan = ragged_branches_compare(ragged_branches, current_plan)
         dist_matrix = current_plan.mat.copy()
 
+        logging.info('The iteration of the main algorithm is finished')
+
     current_plan = find_remaining_edges(dist_matrix, current_plan)
     make_list_points(current_plan, id_first)
     return current_plan.track
-    # return do_array_id(current_plan.lst_edges, id_first)
