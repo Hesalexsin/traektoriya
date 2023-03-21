@@ -13,7 +13,7 @@ class PairPoints:
 
 
 class Plan:
-    def __init__(self, mat: np.array, lower_limit: int, lst_edges: list, track=[]):
+    def __init__(self, mat: np.array, lower_limit: int, lst_edges=[], track=[]):
         self.mat = mat.copy()
         self.lower_limit = lower_limit
         self.lst_edges = lst_edges.copy()
@@ -52,21 +52,23 @@ class Plan:
             self.track.append(int(pair.id1))
             self.track.append(int(pair.id2))
             self.lst_edges.remove(pair)
-        elif self.track[0] == pair.id2:
+        elif self.track[0] == pair.id2 and self.track[-1] != pair.id1:
             self.track = [int(pair.id1)] + self.track
             self.lst_edges.remove(pair)
-        elif self.track[-1] == pair.id1:
+        elif self.track[-1] == pair.id1 and self.track[0] != pair.id2:
             self.track.append(int(pair.id2))
             self.lst_edges.remove(pair)
 
     def do_array_ids(self):
-        for pair in self.lst_edges:
-            self.add_edge_to_track(pair)
+        for i in range(len(self.lst_edges)):
+            for pair in self.lst_edges:
+                self.add_edge_to_track(pair)
 
     def make_right_order(self, first_id: int):
         for i in range(len(self.track)):
             if self.track[i] == first_id:
                 self.track = self.track[i:] + self.track[:i+1]
+                break
 
 # Press the green button in the gutter to run the script.
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
