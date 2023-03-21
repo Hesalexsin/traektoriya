@@ -1,5 +1,5 @@
 import numpy as np
-from travelling_salesmans_task import travel_salesmans_task
+import travelling_salesman_problem as t
 import pytest
 
 
@@ -11,13 +11,20 @@ import pytest
                                      [4, 11, 17, 11, np.inf, 12],
                                      [5, 5, 5, 5, 5, np.inf]]),
                            [1, 5, 3, 4, 2, 1]),
+                          (np.array([[0, 1001, 1002, 1003, 1004, 1005],
+                                     [1001, np.inf, 10, 25, 25, 10],
+                                     [1002, 1, np.inf, 10, 15, 2],
+                                     [1003, 8, 9, np.inf, 20, 10],
+                                     [1004, 14, 10, 24, np.inf, 15],
+                                     [1005, 10, 8, 25, 27, np.inf]]),
+                           [1001, 1005, 1002, 1003, 1004, 1001]),
                           (np.array([[0, 1001, 2002, 3003, 4004, 5005],
                                      [1001, np.inf, 20, 18, 12, 8],
                                      [2002, 5, np.inf, 14, 7, 11],
                                      [3003, 12, 18, np.inf, 6, 11],
                                      [4004, 11, 17, 11, np.inf, 12],
                                      [5005, 5, 5, 5, 5, np.inf]]),
-                            [1001, 5005, 3003, 4004, 2002, 1001]),
+                           [1001, 5005, 3003, 4004, 2002, 1001]),
                           (np.array([[0, 111, 222, 333, 444, 555],
                                      [111, np.inf, 90, 80, 40, 100],
                                      [222, 60, np.inf, 40, 50, 70],
@@ -39,10 +46,18 @@ import pytest
                                      [444, 1, 3, 2, np.inf, 3, 1],
                                      [55, 7, 4, 1, 1, np.inf, 4],
                                      [6, 2, 3, 4, 7, 9, np.inf]]),
-                           [1, 22, 55, 444, 6, 333, 1]),
+                           [1, 55, 333, 22, 444, 6, 1]),
+                          (np.array([[0, 1001, 1002, 1003, 1004, 1005, 1006],
+                                     [1001, np.inf, 10, 5, 9, 16, 8],
+                                     [1002, 6, np.inf, 11, 8, 18, 19],
+                                     [1003, 7, 13, np.inf, 3, 4, 14],
+                                     [1004, 5, 9, 6, np.inf, 12, 17],
+                                     [1005, 5, 4, 11, 6, np.inf, 14],
+                                     [1006, 17, 7, 12, 13, 16, np.inf]]),
+                           [1001, 1006, 1002, 1004, 1003, 1005, 1001])
                           ])
-def test_travel_salesmans_task(matrix, result):
-    assert travel_salesmans_task(matrix) == result
+def test_travel_salesman_problem(matrix, result):
+    assert t.travel_salesman_problem(matrix) == result
 
 
 @pytest.mark.parametrize("expected_exception, wrong_mat",
@@ -55,6 +70,6 @@ def test_travel_salesmans_task(matrix, result):
                                      [5, 5, 5, 5, 5, np.inf]])),
 
                           ])
-def test_travel_salesmans_with_error(expected_exception, wrong_mat):
+def test_travel_salesman_with_error(expected_exception, wrong_mat):
     with pytest.raises(expected_exception):
-        travel_salesmans_task(wrong_mat)
+        t.travel_salesman_problem(wrong_mat)
