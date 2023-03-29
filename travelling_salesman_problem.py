@@ -114,12 +114,12 @@ def neighbour(i: int):
         return 1
 
 
-def find_remaining_edges(mat: np.array, current: Plan) -> Plan:
+def find_remaining_edges(current: Plan) -> Plan:
     for i in [1, 2]:
         for j in [1, 2]:
-            if mat[i, j] == np.inf:
-                current.app(PairPoints(mat[i, 0], mat[0, neighbour(j)], True))
-                current.app(PairPoints(mat[neighbour(i), 0], mat[0, j], True))
+            if current.mat[i, j] == np.inf:
+                current.app(PairPoints(current.mat[i, 0], current.mat[0, neighbour(j)], True))
+                current.app(PairPoints(current.mat[neighbour(i), 0], current.mat[0, j], True))
     return current
 
 
@@ -152,24 +152,24 @@ def travel_salesman_problem(dist_matrix: np.array):
     id_first = dist_matrix[0, 1]
     limit = reduction(dist_matrix)
     current_plan = Plan(dist_matrix, limit)
-    while len(dist_matrix) > 3:
-        edge_index = find_degrees_of_zeros(dist_matrix)
-        i, j = arr_index(dist_matrix, edge_index)[0][0], arr_index(dist_matrix, edge_index)[1][0]
+    while len(current_plan.mat) > 3:
+        edge_index = find_degrees_of_zeros(current_plan.mat)
+        i, j = arr_index(current_plan.mat, edge_index)[0][0], arr_index(current_plan.mat, edge_index)[1][0]
 
         plan_exclude = do_new_plan(current_plan.__copy__(), i, j, is_include=False)
         plan_include = do_new_plan(current_plan, i, j, is_include=True)
 
-        if plan_include.lower_limit <= plan_exclude.lower_limit:
+        if plan_include <= plan_exclude:
             current_plan, ragged_branch = plan_include, plan_exclude
         else:
             current_plan, ragged_branch = plan_exclude, plan_include
 
         ragged_branches.append(ragged_branch)
         current_plan = ragged_branches_compare(ragged_branches, current_plan)
-        dist_matrix = current_plan.mat.copy()
+        #dist_matrix = current_plan.mat.copy()
 
     logging.info('The iteration of the main algorithm is finished')
 
-    current_plan = find_remaining_edges(dist_matrix, current_plan)
+    current_plan = find_remaining_edges(current_plan)
     track = current_plan.do_array_ids(id_first)
     return track
