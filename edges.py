@@ -1,4 +1,6 @@
 import json
+import logging
+
 import numpy as np
 
 
@@ -37,24 +39,44 @@ def fill_array(a: np.array, n: int, points: dict):
 
 # calculating distance between points using the pythagorean theorem
 def distance(dot1: dict, dot2: dict):
-    x1 = dot1.get('x')
-    y1 = dot1.get('y')
-    x2 = dot2.get('x')
-    y2 = dot2.get('y')
+    x1, y1, x2, y2 = dot1['x'], dot1['y'], dot2['x'], dot2['y']
     r12 = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
     return r12
 
+
 # calculating length of edges allow intersections with FLs (need strategy of realisation)
-def update_edges_with_fl(a: np.array, n: int, points: dict, data_forbidden_lines):
-    pass
+def update_edges_with_fl(a: np.array, n: int, points: dict, data_forbidden_lines: dict):
+    ids = list(points.keys())
+    indexes = a[0]
+    for fl in data_forbidden_lines:
+        id1, id2 = fl['id1'], fl['id2']
+        ind1, ind2 = np.where(indexes == id1)[0][0], np.where(indexes == id2)[0][0]
+
+        a[ind1][ind2], a[ind2][ind1] = np.inf, np.inf
+
+        check = ids.copy()
+        logging.debug(check)
+        check.remove(0)
+        check.remove(id1)
+        check.remove(id2)
+        for id3 in check:
+            for id4 in check:
+                if id3 != id4:
+                    is_intersection_exist = is_intersect(points[id1], points[id2], points[id3], points[id4])
+                    logging.debug(points[id1], points[id2], points[id3], points[id4])
+                    logging.debug(indexes,np.where(indexes == 1007))
+                    logging.debug(np.where(indexes == id3), np.where(indexes == id4), id4)
+                    ind3, ind4 = np.where(indexes == id3)[0][0], np.where(indexes == id4)[0][0]
+                    if is_intersection_exist:
+                        a[ind3][ind4], a[ind4][ind3] = np.inf, np.inf
+                    elif is_intersection_exist == 'invalid data':
+                        return a, 'invalid_data'
+    return a, 'OK'
 
 
 # checking intersections of one of the edges and one of the FLs (need more compact func)
 def is_intersect(dot1: dict, dot2: dict, dot3: dict, dot4: dict):
-    x1 = dot1.get('x')
-    x2 = dot2.get('x')
-    x3 = dot3.get('x')
-    x4 = dot4.get('x')
+    x1, x2, x3, x4 = dot1['x'], dot2['x'], dot3['x'], dot4['x']
     orient1 = check_orientation(dot1, dot2, dot3)
     orient2 = check_orientation(dot1, dot2, dot4)
     orient3 = check_orientation(dot3, dot4, dot1)
@@ -62,24 +84,20 @@ def is_intersect(dot1: dict, dot2: dict, dot3: dict, dot4: dict):
     if orient1 != orient2 and orient3 != orient4:
         return True
     elif orient1 == 0 and ((x1 > x3 > x2) or (x1 < x3 < x2)):
-        return True
+        return 'invalid data'
     elif orient2 == 0 and ((x1 > x4 > x2) or (x1 < x4 < x2)):
-        return True
+        return 'invalid data'
     elif orient3 == 0 and ((x3 > x1 > x4) or (x3 < x1 < x4)):
-        return True
+        return 'invalid data'
     elif orient4 == 0 and ((x3 > x2 > x4) or (x3 < x2 < x4)):
-        return True
+        return 'invalid data'
     else:
         return False
 
+
 # checks the orientation of triples of points (reformat to more compact func)
 def check_orientation(dot1: dict, dot2: dict, dot3: dict):
-    x1 = dot1.get('x')
-    y1 = dot1.get('y')
-    x2 = dot2.get('x')
-    y2 = dot2.get('y')
-    x3 = dot3.get('x')
-    y3 = dot3.get('y')
+    x1, y1, x2, y2, x3, y3 = dot1['x'], dot1['y'], dot2['x'], dot2['y'], dot3['x'], dot3['y']
     orient = (y2 - y1) * (x3 - x2) - (x2 - x1) * (y3 - y2)
     if orient > 0:
         return 1

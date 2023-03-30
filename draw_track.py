@@ -10,19 +10,18 @@ def draw_track(points: dict, sequence: list, fl: list):
     Y = []
     # drawinng track (need a function)
     for d in sequence:
-        X.append(points.get(d).get('x'))
-        Y.append(points.get(d).get('y'))
+        point = points[d]
+        X.append(point['x'])
+        Y.append(point['y'])
     fig, ax = plt.subplots()
     ax.plot(X, Y)
 
     # drawing FLs (need a function)
     for line in fl:
-        X_fl = []
-        Y_fl = []
-        X_fl.append(points.get(line.get('id1')).get('x'))
-        Y_fl.append(points.get(line.get('id1')).get('y'))
-        X_fl.append(points.get(line.get('id2')).get('x'))
-        Y_fl.append(points.get(line.get('id2')).get('y'))
+        id1 = line['id1']
+        id2 = line['id2']
+        X_fl = [points[id1]['x'], points[id2]['x']]
+        Y_fl = [points[id1]['y'], points[id2]['y']]
         ax.plot(X_fl, Y_fl, color='r')
 
     # drawing IDs (need a function)
