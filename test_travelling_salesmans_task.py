@@ -3,6 +3,56 @@ import travelling_salesman_problem as t
 import pytest
 
 
+@pytest.mark.parametrize('matrix, result, expected_matrix',
+                         [(np.array([[0, 1, 2, 3, 4, 5],
+                                     [1, np.inf, 20, 18, 12, 8],
+                                     [2, 5, np.inf, 14, 7, 11],
+                                     [3, 12, 18, np.inf, 6, 11],
+                                     [4, 11, 17, 11, np.inf, 12],
+                                     [5, 5, 5, 5, 5, np.inf]]),
+                           35,
+                           np.array([[0, 1, 2, 3, 4, 5],
+                                     [1, np.inf, 12, 10, 4, 0],
+                                     [2, 0, np.inf, 9, 2, 6],
+                                     [3, 6, 12, np.inf, 0, 5],
+                                     [4, 0, 6, 0, np.inf, 1],
+                                     [5, 0, 0, 0, 0, np.inf]])),
+
+                          (np.array([[0, 111, 222, 333, 444, 555],
+                                     [111, np.inf, 90, 80, 40, 100],
+                                     [222, 60, np.inf, 40, 50, 70],
+                                     [333, 50, 30, np.inf, 60, 20],
+                                     [444, 10, 70, 20, np.inf, 50],
+                                     [555, 20, 40, 50, 20, np.inf]]),
+                           140,
+                           np.array([[0, 111, 222, 333, 444, 555],
+                                     [111, np.inf, 40, 40, 0, 60],
+                                     [222, 20, np.inf, 0, 10, 30],
+                                     [333, 30, 0, np.inf, 40, 0],
+                                     [444, 0, 50, 10, np.inf, 40],
+                                     [555, 0, 10, 30, 0, np.inf]])),
+
+                          (np.array([[0, 1, 22, 333, 444, 55, 6],
+                                     [1, np.inf, 4, 4, 5, 4, 3],
+                                     [22, 2, np.inf, 7, 1, 1, 6],
+                                     [333, 2, 3, np.inf, 9, 4, 5],
+                                     [444, 1, 3, 2, np.inf, 3, 1],
+                                     [55, 7, 4, 1, 1, np.inf, 4],
+                                     [6, 2, 3, 4, 7, 9, np.inf]]),
+                           11,
+                           np.array([[0, 1, 22, 333, 444, 55, 6],
+                                     [1, np.inf, 0, 1, 2, 1, 0],
+                                     [22, 1, np.inf, 6, 0, 0, 5],
+                                     [333, 0, 0, np.inf, 7, 2, 3],
+                                     [444, 0, 1, 1, np.inf, 2, 0],
+                                     [55, 6, 2, 0, 0, np.inf, 3],
+                                     [6, 0, 0, 2, 5, 7, np.inf]]))
+                          ])
+def test_reduction(matrix, result, expected_matrix):
+    assert t.reduction(matrix) == result
+    assert matrix.all() == expected_matrix.all()
+
+
 @pytest.mark.parametrize('matrix, result',
                          [(np.array([[0, 1, 2, 3, 4, 5],
                                      [1, np.inf, 20, 18, 12, 8],
