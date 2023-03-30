@@ -64,7 +64,7 @@ def update_edges_with_fl(a: np.array, n: int, points: dict, data_forbidden_lines
                 if id3 != id4:
                     is_intersection_exist = is_intersect(points[id1], points[id2], points[id3], points[id4])
                     logging.debug(points[id1], points[id2], points[id3], points[id4])
-                    logging.debug(indexes,np.where(indexes == 1007))
+                    logging.debug(indexes, np.where(indexes == 1007))
                     logging.debug(np.where(indexes == id3), np.where(indexes == id4), id4)
                     ind3, ind4 = np.where(indexes == id3)[0][0], np.where(indexes == id4)[0][0]
                     if is_intersection_exist:
@@ -105,3 +105,24 @@ def check_orientation(dot1: dict, dot2: dict, dot3: dict):
         return -1
     else:
         return 0
+
+
+def update_with_fz(a: np.array, n: int, points: dict, data_forbidden_lines: list):
+    if not check_points_in_fz(points, data_forbidden_lines):
+        return 'invalid data', a
+    return 'ok', a
+
+
+def check_points_in_fz(points: dict, fz: list):
+    ids = list(points.keys())
+    for id in ids:
+        for z in fz:
+            p = points[id]
+            x_z = z['x']
+            y_z = z['y']
+            x_p = p['x']
+            y_p = p['y']
+            r = z['r']
+            if (x_p - x_z) ** 2 + (y_p - y_z) ** 2 <= r ** 2:
+                return False
+    return True

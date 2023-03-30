@@ -2,6 +2,7 @@ import json
 import logging
 import sys
 
+
 # preparation of input data for processing by the program
 def make_json_data(json_filename: str):
     try:
@@ -11,8 +12,6 @@ def make_json_data(json_filename: str):
     except OSError:
         logging.error(f"File doesn't exist")
         sys.exit(-1)
-
-
 
 
 # making point array to drawing
