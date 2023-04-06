@@ -9,8 +9,8 @@ def make_json_data(json_filename: str):
         with open(json_filename, "r") as read_file:
             data = json.load(read_file)
         return data
-    except OSError:
-        logging.error(f"File doesn't exist")
+    except OSError as e:
+        logging.error(f'{json_filename} with {str(e)}')
         sys.exit(-1)
 
 

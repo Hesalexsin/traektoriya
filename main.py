@@ -12,7 +12,7 @@ import sys
 # main function
 if __name__ == '__main__':
     logging.config.fileConfig('logconfig.ini')
-    logging.getLogger().level = logging.INFO
+    logging.getLogger().level = logging.DEBUG
     filename = 'input.json'
     data = make_json_data(filename)
 
