@@ -10,14 +10,22 @@ class PairPoints:
 
 
 class Plan:
-    def __init__(self, mat: np.array, lower_limit: int, lst_edges={}):
+    def __init__(self, mat: np.array, lower_limit: int, lst_edges=None, first_id=None,):
         self.mat = mat.copy()
         self.lower_limit = lower_limit
-        self.lst_edges = lst_edges.copy()  # {} if lst_edges is None else lst_edges.copy()
+        if lst_edges is None:
+            self.lst_edges = {}
+        else:
+            self.lst_edges = lst_edges.copy()  # {} if lst_edges is None else lst_edges.copy()
+
+        if first_id is None:
+            self.first_id = mat[0, 1]
+        else:
+            self.first_id = first_id
 
     def __copy__(self):
         return Plan(self.mat.copy(), self.lower_limit,
-                    self.lst_edges.copy())
+                    self.lst_edges.copy(), self.first_id)
 
     # Compare operands:
     def __verify_data(cls, other):
@@ -41,12 +49,20 @@ class Plan:
         self.lower_limit += val
 
     # Function for completing list with points -> track
-    def do_array_ids(self, id_first: int):
-        key = id_first
+    def do_array_ids(self, id_airport: int):
+        key = self.first_id
         track = [int(key)]
         while key in self.lst_edges.keys():
             track.append(int(self.lst_edges[key]))
             copy_key = key
             key = self.lst_edges[key]
             del self.lst_edges[copy_key]
+
+            if not (key in self.lst_edges.keys()) and len(self.lst_edges) != 0:
+                new_key = min(self.lst_edges)
+                if new_key < 0:
+                    key = new_key
+        for i in range(len(track)):
+            if track[i] < 0:
+                track[i] = int(id_airport)
         return track
