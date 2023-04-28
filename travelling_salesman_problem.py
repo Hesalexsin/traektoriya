@@ -32,6 +32,8 @@ def column_reduction(mat: np.array):
 def reduction(mat: np.array):
     summ_min = line_reduction(mat)
     summ_min += column_reduction(mat)
+    if isnan(summ_min) or isinf(summ_min):
+        summ_min = np.inf
     return summ_min
 
 
@@ -78,7 +80,8 @@ def include_edge(plan: Plan, i: int, j: int):
     plan.mat[i_index, j_index] = np.inf
     plan.mat = np.delete(plan.mat, i, 0)
     plan.mat = np.delete(plan.mat, j, 1)
-    avoid_cycle(plan)
+    if len(plan.mat) > 2:
+        avoid_cycle(plan)
     lower_limit = reduction(plan.mat)
     plan.inc_limit(lower_limit)
 
@@ -105,22 +108,6 @@ def ragged_branches_compare(ragged_branches: list, current: Plan) -> Plan:
     return current
 
 
-# The functions, which find the remaining edges in matrix 2x2
-def neighbour(i: int):
-    if i == 1:
-        return 2
-    if i == 2:
-        return 1
-
-
-def find_remaining_edges(current: Plan):
-    for i in [1, 2]:
-        for j in [1, 2]:
-            if current.mat[i, j] == np.inf:
-                current.app(PairPoints(current.mat[i, 0], current.mat[0, neighbour(j)], True))
-                current.app(PairPoints(current.mat[neighbour(i), 0], current.mat[0, j], True))
-
-
 # The functions, which does the Little's algorythm
 def do_new_plan(current: Plan, i: int, j: int, is_include: bool):
     branch = current.__copy__()
@@ -134,19 +121,16 @@ def travel_salesman_problem(dist_matrix: np.array, id_airport: int):
     """
     The main function, which realizes the Little's method
     :param dist_matrix: the two-dimensional array (matrix), whose first line and first column consist of IDs of points
-                        (the left top is not ID)
-                        and whose other part is the matrix of distances
-                        between points with ID in appropriate lines and columns;
+                        (the left top is not ID), other part - matrix of distances;
                         the distances between the same points are infinity;
-                        the first point in the first line and the first column (after left top) is the starting point
+    :param id_airport: the ORIGIN ID of the first point/base airport
     :return: the array with the ordered sequence of points of the shortest path from the first to the first point
              through all points
     """
     ragged_branches = []
     limit = reduction(dist_matrix)
     current_plan = Plan(dist_matrix, limit)
-    print(current_plan.mat)
-    while len(current_plan.mat) > 3:
+    while len(current_plan.mat) > 2:
         edge_index = find_degrees_of_zeros(current_plan.mat)
         i, j = arr_index(current_plan.mat, edge_index)[0][0], arr_index(current_plan.mat, edge_index)[1][0]
 
@@ -159,8 +143,8 @@ def travel_salesman_problem(dist_matrix: np.array, id_airport: int):
 
         ragged_branches.append(ragged_branch)
         current_plan = ragged_branches_compare(ragged_branches, current_plan)
-        
+
         logging.info('The iteration of the main algorithm is finished')
 
-    find_remaining_edges(current_plan)
+    current_plan.app(PairPoints(current_plan.mat[1, 0], current_plan.mat[0, 1], True))
     return current_plan.do_array_ids(id_airport)
