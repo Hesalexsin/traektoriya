@@ -1,7 +1,14 @@
 import numpy as np
 import travelling_salesman_problem as t
+import actions_with_matrixes as a
 import pytest
 
+
+def length_of_track(track: list, mat: np.array):
+    res = 0
+    for k in range(1, len(track)):
+        res += float(mat[a.arr_index(mat, [track[k - 1], track[k]])])
+    return res
 
 @pytest.mark.parametrize('matrix, result, expected_matrix',
                          [(np.array([[0, 1, 2, 3, 4, 5],
@@ -49,7 +56,7 @@ import pytest
                                      [6, 0, 0, 2, 5, 7, np.inf]]))
                           ])
 def test_reduction(matrix, result, expected_matrix):
-    assert t.reduction(matrix) == result
+    assert a.reduction(matrix) == result
     assert matrix.all() == expected_matrix.all()
 
 
@@ -80,7 +87,7 @@ def test_reduction(matrix, result, expected_matrix):
                            [22, 55]),
                           ])
 def test_find_degrees_of_zeros(matrix, result):
-    res_expected_mat = t.find_degrees_of_zeros(matrix)
+    res_expected_mat = a.find_degrees_of_zeros(matrix)
     assert res_expected_mat[0] == result[0] and res_expected_mat[1] == result[1]
 
 
@@ -145,7 +152,8 @@ def test_find_degrees_of_zeros(matrix, result):
                            [1001, 1006, 1002, 1004, 1003, 1005, 1001]),
                           ])
 def test_travel_salesman_problem(matrix, first_id, result):
-    assert t.travel_salesman_problem(matrix, first_id) == result
+    track = t.travel_salesman_problem(matrix.copy(), first_id)
+    assert length_of_track(track, matrix) == length_of_track(result, matrix)
 
 
 @pytest.mark.parametrize("expected_exception, wrong_mat, first_id",
