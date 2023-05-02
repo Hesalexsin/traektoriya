@@ -1,7 +1,15 @@
 import numpy as np
 from matrix_processing import MatrixDistances
 from multi_TSP import multi_tsp
+from test_travelling_salesman_problem import length_of_track
 import pytest
+
+
+def length_of_many_tracks(tracks: list, mat: np.array):
+    res = 0
+    for track in tracks:
+        res += length_of_track(track, mat)
+    return res
 
 
 @pytest.mark.parametrize('dist_matrix, count_add_drones, expected_matrix',
@@ -79,6 +87,14 @@ def test_matrix_multi_transformation(dist_matrix, count_add_drones, expected_mat
                                      [7, 10, 10, 17, 20, 17, 10, np.inf]]),
                            3,
                            [[1, 2, 1], [1, 3, 1], [1, 4, 5, 6, 7, 1]]),
+                          (np.array([[0, 1, 2, 3, 4],
+                                     [1, np.inf, 5, 5, 15],
+                                     [2, 5, np.inf, 5, 18],
+                                     [3, 5, 5, np.inf, 18],
+                                     [4, 15, 18, 18, np.inf]]),
+                           2,
+                           [[1, 2, 3, 1], [1, 4, 1]]),
                           ])
 def test_multi_tsp(matrix, count_drones, result):
-    assert multi_tsp(matrix, count_drones) == result
+    track = multi_tsp(matrix.copy(), count_drones)
+    assert length_of_many_tracks(track, matrix) == length_of_many_tracks(result, matrix)
