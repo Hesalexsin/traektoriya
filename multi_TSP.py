@@ -14,10 +14,12 @@ def split_into_tracks(tracks: list, id_airport: int) -> list:
 
 def multi_tsp(dist_matrix: np.array, count_drones: int):
     """
-    :param dist_matrix: matrix of distances (like in travel_salesman_problem()
+    :param dist_matrix: matrix of distances (like in travel_salesman_problem())
     :param count_drones: count of flying apparatus
     :return: array of arrays with tracks for all apparatus
     """
+    if count_drones >= len(dist_matrix) - 1:
+        raise RuntimeError("Too many drones for this count of control points")
     work_matrix = MatrixDistances(dist_matrix)
     work_matrix.matrix_multi_transformation(count_drones - 1)
     tracks = travel_salesman_problem(work_matrix.mat, work_matrix.firstID)
