@@ -1,13 +1,11 @@
 import numpy as np
-from math import isinf, isnan
+from actions_with_matrixes import matrix_transformation, find_degrees_of_zeros, arr_index
 from plan_pair import PairPoints, Plan
 
 import logging
 import logging.config
 
 # Constructing loggers:
-'''logging.config.fileConfig('logconfig_algorithm.ini')'''
-
 logging.basicConfig(
     filename='algorithm.log',
     level=logging.INFO,
@@ -16,63 +14,10 @@ logging.basicConfig(
 )
 
 
-# These functions find minimal values in lines/columns and subtract them from the lines/columns
-def line_reduction(mat: np.array):
-    summ_min = mat[1:, 1:].min(axis=1).sum()
-    mat[1:, 1:] -= mat[1:, 1:].min(axis=1)[:, np.newaxis]
-    return summ_min
-
-
-def column_reduction(mat: np.array):
-    summ_min = mat[1:, 1:].min(axis=0).sum()
-    mat[1:, 1:] -= mat[1:, 1:].min(axis=0)
-    return summ_min
-
-
-def reduction(mat: np.array):
-    summ_min = line_reduction(mat)
-    summ_min += column_reduction(mat)
-    if isnan(summ_min) or isinf(summ_min):
-        summ_min = np.inf
-    return summ_min
-
-
-# Additional matrix transformation
-def line_transformation(mat: np.array):
-    pass
-
-
-# Finding of the biggest degrees of zeros and choosing of the edge
-def degree_of_the_one_zero(mat: np.array, i: int, j: int):
-    return (np.concatenate((mat[1:i, j], mat[i + 1:, j])).min() +
-            np.concatenate((mat[i, j + 1:], mat[i, 1:j])).min())
-
-
-def find_degrees_of_zeros(mat: np.array):
-    """
-    :param mat: REDUCED matrix
-    :return: array of 2 INDEXES of zero with the biggest degrees
-    """
-    res, i, j = -1, 0, 0
-    index1, index2 = np.where(mat == 0)
-    for k in range(1, len(index1)):
-        curr = degree_of_the_one_zero(mat, index1[k], index2[k])
-        if curr > res:
-            res, i, j = curr, index1[k], index2[k]
-    return [mat[i, 0], mat[0, j]]
-
-
-# Set accordance between indexes og matrix and id
-def arr_index(mat: np.array, edge_id: list):
-    index1, index2 = np.where(mat[:, 0] == edge_id[0])[0], np.where(mat[0, :] == edge_id[1])[0]
-    return index1, index2
-
-
 # Branching: exclusion and inclusion of an edge
 def exclude_edge(plan: Plan, i: int, j: int):
     plan.mat[i, j] = np.inf
-    lower_limit = reduction(plan.mat)
-    plan.inc_limit(lower_limit)
+    matrix_transformation(plan)
 
 
 def include_edge(plan: Plan, i: int, j: int):
@@ -82,8 +27,7 @@ def include_edge(plan: Plan, i: int, j: int):
     plan.mat = np.delete(plan.mat, j, 1)
     if len(plan.mat) > 2:
         avoid_cycle(plan)
-    lower_limit = reduction(plan.mat)
-    plan.inc_limit(lower_limit)
+    matrix_transformation(plan)
 
 
 # The function, which helps to avoid infinity cycles in track
@@ -128,8 +72,8 @@ def travel_salesman_problem(dist_matrix: np.array, id_airport: int):
              through all points
     """
     ragged_branches = []
-    limit = reduction(dist_matrix)
-    current_plan = Plan(dist_matrix, limit)
+    current_plan = Plan(dist_matrix, 0)
+    matrix_transformation(current_plan)
     while len(current_plan.mat) > 2:
         edge_index = find_degrees_of_zeros(current_plan.mat)
         i, j = arr_index(current_plan.mat, edge_index)[0][0], arr_index(current_plan.mat, edge_index)[1][0]
@@ -141,9 +85,14 @@ def travel_salesman_problem(dist_matrix: np.array, id_airport: int):
         else:
             current_plan, ragged_branch = plan_exclude, plan_include
 
+        logging.debug("chosen edge: " + str(edge_index))
+        logging.debug("\ncurrent_plan matrix: \n" + str( current_plan.mat))
+        logging.debug("\nragged_branch matrix: \n" + str(ragged_branch.mat))
+
         ragged_branches.append(ragged_branch)
         current_plan = ragged_branches_compare(ragged_branches, current_plan)
 
+        logging.debug("\nnew current_plan matrix: \n" + str(current_plan.mat))
         logging.info('The iteration of the main algorithm is finished')
 
     current_plan.app(PairPoints(current_plan.mat[1, 0], current_plan.mat[0, 1], True))
