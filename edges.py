@@ -101,7 +101,7 @@ def update_edges_with_fl(a: np.array, n: int, points: dict, data_forbidden_lines
 
 # checking intersections of one of the edges and one of the FLs (need more compact func)
 #TODO more compact, comments, rename
-def is_intersect(dot1: tracks.Point, dot2: tracks.Point, dot3: tracks.Point, dot4: tracks.Point):
+def is_intersect(dot1, dot2, dot3, dot4):
     x1, x2, x3, x4 = dot1.x, dot2.x, dot3.x, dot4.x
     orient1 = check_orientation(dot1, dot2, dot3)
     orient2 = check_orientation(dot1, dot2, dot4)
@@ -122,7 +122,7 @@ def is_intersect(dot1: tracks.Point, dot2: tracks.Point, dot3: tracks.Point, dot
 
 
 # checks the orientation of triples of points (reformat to more compact func)
-def check_orientation(dot1: tracks.Point, dot2: tracks.Point, dot3: ):
+def check_orientation(dot1, dot2, dot3):
     x1, y1  = dot1.args()
     x2, y2 = dot2.args()
     x3, y3 = dot3.args()
