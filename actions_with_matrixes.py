@@ -51,6 +51,9 @@ def column_transformation(plan: Plan):
         group_idx = [idx for idx, lin in zip(indexes, numbers_lines) if lin == line]
         if len(group_idx) > 1:
             min_elem = np.concatenate((plan.mat[1:line, group_idx], plan.mat[line + 1:, group_idx]), axis=0).min()
+            if isnan(min_elem) or isinf(min_elem):
+                plan.inc_limit(np.inf)
+                break
             plan.mat[1:, group_idx] -= min_elem
             plan.mat[line, 1:] += min_elem
             plan.inc_limit(min_elem * (len(group_idx) - 1))
