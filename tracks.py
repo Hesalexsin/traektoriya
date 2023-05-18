@@ -9,7 +9,6 @@ import matplotlib.patches
 import matplotlib.pyplot as plt
 import numpy as np
 
-import tracks
 
 
 #global fig, ax
@@ -107,21 +106,21 @@ class Arc(Fragment):
         if d1.y >= c.y:
             alpha = math.degrees(math.acos((d1.x - c.x) / self.r))
         else:
-            alpha = 360 + math.degrees(math.acos((d1.x - c.x) / self.r))
+            alpha = math.degrees(math.acos((d1.x - c.x) / self.r)) +180
 
         if d2.y >= c.y:
             beta = math.degrees(math.acos((d2.x - c.x) / self.r))
         else:
-            beta = 360 + math.degrees(math.acos((d2.x - c.x )/ self.r))
+            beta =  math.degrees(math.acos((d2.x - c.x )/ self.r)) +180
         if path == 'short':  # TODO shorter comparison
-            if alpha - beta <= 180:
+            if  (alpha + 180) % 360 >= beta: #alpha - beta <= 180
                 self.alpha = alpha
                 self.beta = beta
             else:
                 self.alpha = beta
                 self.beta = alpha
         else:
-            if alpha - beta <= 180:
+            if (alpha + 180) % 360 >= beta:
                 self.alpha = beta
                 self.beta = alpha
             else:
@@ -129,7 +128,7 @@ class Arc(Fragment):
                 self.beta = beta
         #TODO fix lenght calculation
         self.length = math.pi * 2 * self.r * (angle_in_range(abs(self.beta - self.alpha)) / 360)
-        print('arc-init',self.length, self.alpha, self.beta, (self.beta - self.alpha))
+        print('arc-init',self.length, self.alpha, self.beta, (self.beta - self.alpha),(angle_in_range(abs(self.beta - self.alpha)) / 360))
 
     def __eq__(self, other):
         if self.d1 == other.d1 and self.d2 == other.d2 and self.c == other.c:
@@ -141,7 +140,7 @@ class Arc(Fragment):
     def draw(self, ax):
         #TODO fix drawing
         ax.add_patch(matplotlib.patches.Arc(xy=(self.c.x, self.c.y), width=self.r * 2, height=self.r * 2,
-                                             theta2=self.alpha, theta1=self.beta, color='b'))
+                                             theta1=min(self.alpha, self.beta), theta2=max(self.alpha, self.beta), color='b'))
 
 class Circle(Fragment):
     def __init__(self,  c: Point, r: int):
@@ -163,6 +162,7 @@ class Circle(Fragment):
 
 class Relief:
     def __init__(self, *vertex:Point):
+        pass
 
 class Track:
     def __init__(self,  *parts: Fragment, is_inf=False):
@@ -196,7 +196,7 @@ class Track:
                 # part.intersect_fl(obst['fls'])
                 ans = None
                 #print(1, type(part) is tracks.Line )
-                if type(part) is tracks.Line:
+                if type(part) is Line:
                     ans= intersect_fz(part, obst['fzs'])
                     print(ans)
                 if ans is not None:
