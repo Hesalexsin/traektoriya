@@ -38,16 +38,25 @@ logging.debug(f"Read data: "
               f" forbidden_zones "
               f" {data_forbidden_zones} \n")
 
-
-path = tracks.Track(tracks.Line(tracks.Point(data_points[0]['x'],data_points[0]['y']),
-                                tracks.Point(data_points[1]['x'],data_points[1]['y'])))
+d1 = tracks.Point(data_points[0]['x'],data_points[0]['y'])
+d2 = tracks.Point(data_points[1]['x'],data_points[1]['y'])
+#print(0)
+path = tracks.Track(tracks.Line(d1,d2))
+#print(0)
+print(path.fragments)
 c = tracks.Point(data_forbidden_zones[0]['x'],data_forbidden_zones[0]['y'])
-d = tracks.Point(data_forbidden_zones[0]['x'],data_forbidden_zones[0]['y'] + data_forbidden_zones[0]['r'])
-alpha = d.x - c.x / data_forbidden_zones[0]['r']
-print(alpha, (d.x - c.x) / data_forbidden_zones[0]['r'])
-path.find_path({'fzs':[tracks.Arc(d,d, c)]})
+d3 = tracks.Point(data_forbidden_zones[0]['x'],data_forbidden_zones[0]['y'] + data_forbidden_zones[0]['r'])
+d4 = tracks.Point(data_forbidden_zones[0]['x']+ data_forbidden_zones[0]['r'],data_forbidden_zones[0]['y'] )
+r = data_forbidden_zones[0]['r']
+alpha = d3.x - c.x / r
+print(alpha, (d3.x - c.x) / r)
+obst = tracks.Track(tracks.Circle(c, r))
+path.find_path({'fzs':[ obst.fragments[0]]})
 
-print(path.fragments[1].length)
+print(obst.fragments[0].length)
+
+tracks.draw( obst, path)
+#, obst
 
 
 
