@@ -55,7 +55,7 @@ path.find_path({'fzs':[ obst.fragments[0]]})
 
 print(obst.fragments[0].length)
 
-tracks.draw( obst, path)
+tracks.draw('_test_one_circle.png', obst, path)
 #, obst
 
 

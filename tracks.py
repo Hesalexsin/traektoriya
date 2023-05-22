@@ -59,8 +59,9 @@ class Fragment:
 
 
 class Line(Fragment):
-    def __init__(self, d1: Point, d2: Point, is_inf=False):
+    def __init__(self,color, d1: Point, d2: Point, is_inf=False):
         #print(is_inf)
+        self.color = color
         if not is_inf:
             #print(is_inf)
             self.d1 = d1
@@ -80,7 +81,7 @@ class Line(Fragment):
         else:
             return False
 
-    def draw(self, ax):
+    def draw(self, ax, color):
         if self.length != np.inf:
             X = np.array([self.d1.x,self.d2.x])
             Y = np.array([self.d1.y,self.d2.y])
@@ -91,7 +92,7 @@ class Line(Fragment):
             print('array',np.array([self.d1.args(),self.d2.args()]))
             cords = np.array([self.d1.args(),self.d2.args()])
 
-            ax.add_patch(matplotlib.patches.Polygon(cords,closed= False,edgecolor= 'b',fill= False ))
+            ax.add_patch(matplotlib.patches.Polygon(cords,closed= False,edgecolor= color,fill= False ))
 
     def is_inf(self):
         return (self.length == np.inf)
@@ -154,10 +155,10 @@ class Arc(Fragment):
             return False
 
 
-    def draw(self, ax):
+    def draw(self, ax, color):
         #TODO fix drawing
         ax.add_patch(matplotlib.patches.Arc(xy=(self.c.x, self.c.y), width=self.r * 2, height=self.r * 2,
-                                             theta1=self.alpha, theta2= self.beta, color='b'))
+                                             theta1=self.alpha, theta2= self.beta, color= color))
 
 class Circle(Fragment):
     def __init__(self,  c: Point, r: int):
@@ -174,16 +175,43 @@ class Circle(Fragment):
     def intersect_fz(self, obst):
         pass
 
-    def draw(self, ax):
-        ax.add_patch(matplotlib.patches.Circle(xy=(self.c.x, self.c.y), radius= self.r, fill= False, edgecolor='r'))
+    def draw(self, ax, color):
+        ax.add_patch(matplotlib.patches.Circle(xy=(self.c.x, self.c.y), radius= self.r, fill= False, edgecolor= color))
 
-class Relief:
-    def __init__(self, *vertex:Point):
-        pass
+class Relief(Fragment):
+    def __init__(self, vertex:list):
+        self.points = []
+        self.length = 0
+        print(vertex)
+        for p in vertex:
+            print(p)
+            self.points.append(p)
+        for i in range(len(self.points)):
+            print(self.points, 'points',self.points[i- 1], self.points[i])
+            self.length += distance(self.points[i- 1], self.points[i])
+
+
+
+    def draw(self, ax, color):
+        #X = np.array([p.x for p in self.points])
+        #Y = np.array([p.y for p in self.points])
+
+
+        # ax.plot(X,Y)
+        #print('array', np.array([self.d1.args(), self.d2.args()]))
+        cords = np.array([p.args() for p in self.points])
+
+        ax.add_patch(matplotlib.patches.Polygon(cords, closed=True, edgecolor= color, fill=False))
+
+
+
+
+
 
 class Track:
-    def __init__(self,  *parts: Fragment, is_inf=False):
+    def __init__(self, color, *parts: Fragment, is_inf=False):
         #print(is_inf)
+        self.color = color
         if not is_inf:
             self.fragments = []
             self.length = 0
@@ -213,8 +241,11 @@ class Track:
                 # part.intersect_fl(obst['fls'])
                 ans = None
                 #print(1, type(part) is tracks.Line )
-                if type(part) is Line:
+                if type(part) is Line and obst['fzs'] != []:
                     ans= intersect_fz(part, obst['fzs'])
+                    print(ans)
+                if type(part) is Line and obst['relief'] != []:
+                    ans= intersect_relief(part, obst['relief'])
                     print(ans)
                 if ans is not None:
                     self.update(part, ans)
@@ -223,7 +254,7 @@ class Track:
                 return
 
 
-def draw(*tracks: Track):
+def draw(output_filename,*tracks: Track):
     plt.rcParams.update({'figure.figsize': (5, 5)})
     fig, ax = plt.subplots()
     ax.set_aspect('equal', adjustable='box')
@@ -233,16 +264,16 @@ def draw(*tracks: Track):
         for x in track.fragments:
             print(2,x)
 
-            x.draw(ax)
+            x.draw(ax, track.color)
     #ax.add_patch(matplotlib.patches.Polygon(np.array([[1,1],[2,2],[3,3]]),closed= False))
 
 
     #tracks[0].fragments[1].draw(ax)
 
     #ax.add_patch(matplotlib.patches.Polygon(np.array([[1, 1], [2, 2], [3, 3]]), closed=False))
-    output_filename = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + '_test_one_circle.png'
-    fig.savefig(output_filename, dpi=300)
-    logging.info(f"{output_filename} created")
+    output_filename = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + output_filename
+    fig.savefig('res/' + output_filename, dpi=300)
+    logging.info(f"{ output_filename}  created")
 
 
 def _find_dodge(self):
@@ -325,7 +356,98 @@ def intersect_fz(line: Line, obst:list):
                 if (0 <= x1 <= 0.999999 and 0 <= x2 <= 0.999999):
                     return dodge_fz(line, circ)
 
+def on_poly_path(poly, start, stop):
+    track1 = []
+    track2 = []
+    len1 = 0
+    len2 = 0
+    flag = False
+    for i in range(len(poly.points)*2):
+        if poly.points[i % len(poly.points)] == start and flag == False:
+            flag = True
+        elif poly.points[i% len(poly.points)] == start and flag == True:
+            break
+        elif poly.points[i% len(poly.points)] != start and flag == True:
+            track1.append(Line(poly.points[(i - 1)% len(poly.points)], poly.points[i]))
+            len1 += track1[-1].length
+        if poly.points[i] == stop and flag == True:
+            break
+    for j in range(len(poly.points)*2, 0, -1):
+        if poly.points[j % len(poly.points)] == start and flag == False:
+            flag = True
+        elif poly.points[j % len(poly.points)] == start and flag == True:
+            break
+        elif poly.points[j % len(poly.points)] != start and flag == True:
+            track1.append(Line(poly.points[(j + 1)% len(poly.points)], poly.points[j]))
+            len2 += track2[-1].length
+        if poly.points[j] == stop and flag == True:
+            break
 
+    if len1 >= len2:
+        return track1
+    else:
+        return track2
+
+def check_sign_of_vector_prod(d1, d2, d3, d4):
+    math.acos(((d2.x-d1.x )*(d3.x - d2.x) +(d2.y-d1.y )*(d3.y - d2.y))/((((d2.x-d1.x )**2 + (d2.y-d1.y )**2)**0.5)*(((d3.x - d2.x)**2 + (d3.y - d2.y)**2)**0.5)))
+    return False
+
+def check_prop(p1,p2,p3):
+    if p2.x- p1.x/ p2.y- p1.y == p3.x- p1.x/ p3.y- p1.y:
+        if distanse(p1,p2) >= distance(p1,p3):
+            return p3
+        else:
+            return p2
+def dodge_relief(line: Line, poly: Relief):
+    d1_tangent_points =[]
+    d2_tangent_points = []
+    for i in range((len(poly.points)) ):
+        if check_sign_of_vector_prod(line.d1, poly.points[i], poly.points[i-1], poli.points[(i+1) %(len(poly.points))]):
+            d1_tangent_points.append(poly.points[i])
+            if len(d1_tangent_points) >1:
+                deleted_point = check_prop(line.d1, d1_tangent_points[-1], d1_tangent_points[-2])
+                if not (deleted_point is None):
+                    d1_tangent_points.remove(deleted_point)
+
+        if check_sign_of_vector_prod(line.d2, poly.points[i], poly.points[i - 1], poli.points[(i + 1) % (len(poly.points))]):
+            if check_sign_of_vector_prod(line.d2, poly.points[i], poly.points[i - 1],
+                                         poli.points[(i + 1) % (len(poly.points))]):
+                d2_tangent_points.append(poly.points[i])
+                if len(d2_tangent_points) > 1:
+                    deleted_point = check_prop(line.d2, d2_tangent_points[-1], d2_tangent_points[-2])
+                    if not (deleted_point is None):
+                        d2_tangent_points.remove(deleted_point)
+
+    track1 = [Line(line.d1, d1_tangent_points[0])] + on_poly_path(poly,d1_tangent_points[0],d2_tangent_points[0]) + Line(d2_tangent_points[0],line.d2)
+    track2 = [Line(line.d1, d1_tangent_points[0])] + on_poly_path(poly, d1_tangent_points[0],
+                                                                  d2_tangent_points[1]) + Line(d2_tangent_points[1],
+                                                                                               line.d2)
+    track3 = [Line(line.d1, d1_tangent_points[1])] + on_poly_path(poly, d1_tangent_points[1],
+                                                                  d2_tangent_points[0]) + Line(d2_tangent_points[0],
+                                                                                               line.d2)
+    track4 = [Line(line.d1, d1_tangent_points[1])] + on_poly_path(poly, d1_tangent_points[1],
+                                                                  d2_tangent_points[1]) + Line(d2_tangent_points[1],
+                                                                                               line.d2)
+    dodge_paths = [track1, track2,track3,track4]
+    lengths = [0,0,0,0]
+    for i in range(4):
+        for x in dodge_paths[i]:
+            lengths[i] += x.length
+
+    return dodge_paths[lengths.index(min(lengths))]
+
+def intersect_relief(line: Line, obst:list):
+    for poly in obst:
+        intersections = 0
+        for i in range(len(poly.points)):
+            #print(poly.points, 'points', self.points[i - 1], self.points[i])
+            if edges.is_intersect(line.d1,line.d2, poly.points[i-1], poly.points[i]):
+                intersections += 1
+
+        if   intersections!=0:
+            return dodge_relief(line, poly)
+        else:
+            return None
 
 
 

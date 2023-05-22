@@ -42,5 +42,5 @@ def draw_track(points: dict, sequence: list, fl: list, fz: list):
 
     # saving picture (need function and need another paths of output)
     output_filename = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + '_track.png'
-    fig.savefig(output_filename, dpi=300)
+    fig.savefig( output_filename, dpi=300)
     logging.info(f"{output_filename} created")
