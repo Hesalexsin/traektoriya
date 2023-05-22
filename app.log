@@ -1270,3 +1270,149 @@ INFO:2023-05-18 15:23:32,149:No forbidden lines
 DEBUG:2023-05-18 15:23:32,149:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 10}, {'id': 1002, 'x': 45, 'y': 10}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
 
 INFO:2023-05-18 15:23:32,482:2023-05-18_15-23-32_test_one_circle.png created
+INFO:2023-05-18 15:25:28,209:No forbidden lines
+DEBUG:2023-05-18 15:25:28,209:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 10}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-18 15:25:28,548:2023-05-18_15-25-28_test_one_circle.png created
+INFO:2023-05-18 15:26:04,813:No forbidden lines
+DEBUG:2023-05-18 15:26:04,814:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 11}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-18 15:26:05,158:2023-05-18_15-26-04_test_one_circle.png created
+INFO:2023-05-18 15:27:03,594:No forbidden lines
+DEBUG:2023-05-18 15:27:03,594:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 11}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-18 15:27:03,930:2023-05-18_15-27-03_test_one_circle.png created
+INFO:2023-05-18 15:27:55,469:No forbidden lines
+DEBUG:2023-05-18 15:27:55,469:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 13}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-18 15:27:55,841:2023-05-18_15-27-55_test_one_circle.png created
+INFO:2023-05-18 15:32:16,060:No forbidden lines
+DEBUG:2023-05-18 15:32:16,060:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-18 15:32:16,722:2023-05-18_15-32-16_test_one_circle.png created
+INFO:2023-05-22 03:55:42,516:No forbidden lines
+DEBUG:2023-05-22 03:55:42,517:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 03:55:43,432:2023-05-22_03-55-43_test_one_circle.png created
+INFO:2023-05-22 04:11:23,689:No forbidden lines
+DEBUG:2023-05-22 04:11:23,689:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:11:24,251:2023-05-22_04-11-23_test_one_circle.png created
+INFO:2023-05-22 04:22:45,387:No forbidden lines
+DEBUG:2023-05-22 04:22:45,387:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:22:45,965:2023-05-22_04-22-45_test_one_circle.png created
+INFO:2023-05-22 04:25:27,142:No forbidden lines
+DEBUG:2023-05-22 04:25:27,142:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:25:27,697:2023-05-22_04-25-27_test_one_circle.png created
+INFO:2023-05-22 04:27:40,400:No forbidden lines
+DEBUG:2023-05-22 04:27:40,400:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:27:40,981:2023-05-22_04-27-40_test_one_circle.png created
+INFO:2023-05-22 04:36:14,090:No forbidden lines
+DEBUG:2023-05-22 04:36:14,090:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:36:14,997:2023-05-22_04-36-14_test_one_circle.png created
+INFO:2023-05-22 04:39:54,832:No forbidden lines
+DEBUG:2023-05-22 04:39:54,832:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:39:55,361:2023-05-22_04-39-55_test_one_circle.png created
+INFO:2023-05-22 04:42:05,748:No forbidden lines
+DEBUG:2023-05-22 04:42:05,749:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:42:06,302:2023-05-22_04-42-06_test_one_circle.png created
+INFO:2023-05-22 04:51:02,024:No forbidden lines
+DEBUG:2023-05-22 04:51:02,024:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:51:02,596:2023-05-22_04-51-02_test_one_circle.png created
+INFO:2023-05-22 04:54:12,042:No forbidden lines
+DEBUG:2023-05-22 04:54:12,042:Read data:  data points  [{'id': 1001, 'x': 35, 'y': 8}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:54:12,608:2023-05-22_04-54-12_test_one_circle.png created
+INFO:2023-05-22 04:55:28,805:No forbidden lines
+DEBUG:2023-05-22 04:55:28,805:Read data:  data points  [{'id': 1001, 'x': 38, 'y': 6}, {'id': 1002, 'x': 45, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:55:29,343:2023-05-22_04-55-29_test_one_circle.png created
+INFO:2023-05-22 04:56:06,757:No forbidden lines
+DEBUG:2023-05-22 04:56:06,757:Read data:  data points  [{'id': 1001, 'x': 38, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:56:07,327:2023-05-22_04-56-07_test_one_circle.png created
+INFO:2023-05-22 04:56:38,151:No forbidden lines
+DEBUG:2023-05-22 04:56:38,151:Read data:  data points  [{'id': 1001, 'x': 41, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:56:38,776:2023-05-22_04-56-38_test_one_circle.png created
+INFO:2023-05-22 04:58:43,990:No forbidden lines
+DEBUG:2023-05-22 04:58:43,990:Read data:  data points  [{'id': 1001, 'x': 43, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:58:44,602:2023-05-22_04-58-44_test_one_circle.png created
+INFO:2023-05-22 04:59:47,057:No forbidden lines
+DEBUG:2023-05-22 04:59:47,057:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 04:59:47,617:2023-05-22_04-59-47_test_one_circle.png created
+INFO:2023-05-22 05:02:44,018:No forbidden lines
+DEBUG:2023-05-22 05:02:44,019:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:02:44,602:2023-05-22_05-02-44_test_one_circle.png created
+INFO:2023-05-22 05:04:18,645:No forbidden lines
+DEBUG:2023-05-22 05:04:18,645:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:04:18,922:2023-05-22_05-04-18_test_one_circle.png created
+INFO:2023-05-22 05:04:44,868:No forbidden lines
+DEBUG:2023-05-22 05:04:44,868:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:04:45,150:2023-05-22_05-04-45_test_one_circle.png created
+INFO:2023-05-22 05:07:34,497:No forbidden lines
+DEBUG:2023-05-22 05:07:34,497:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:07:34,771:2023-05-22_05-07-34_test_one_circle.png created
+INFO:2023-05-22 05:08:51,481:No forbidden lines
+DEBUG:2023-05-22 05:08:51,482:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:08:51,902:2023-05-22_05-08-51_test_one_circle.png created
+INFO:2023-05-22 05:09:24,118:No forbidden lines
+DEBUG:2023-05-22 05:09:24,118:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:09:43,417:No forbidden lines
+DEBUG:2023-05-22 05:09:43,417:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:09:43,701:2023-05-22_05-09-43_test_one_circle.png created
+INFO:2023-05-22 05:11:09,536:No forbidden lines
+DEBUG:2023-05-22 05:11:09,537:Read data:  data points  [{'id': 1001, 'x': 42.9, 'y': 6}, {'id': 1002, 'x': 42, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:11:09,808:2023-05-22_05-11-09_test_one_circle.png created
+INFO:2023-05-22 05:11:51,100:No forbidden lines
+DEBUG:2023-05-22 05:11:51,100:Read data:  data points  [{'id': 1001, 'x': 43, 'y': 6}, {'id': 1002, 'x': 40, 'y': 16}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:11:51,375:2023-05-22_05-11-51_test_one_circle.png created
+INFO:2023-05-22 05:12:36,519:No forbidden lines
+DEBUG:2023-05-22 05:12:36,520:Read data:  data points  [{'id': 1001, 'x': 43, 'y': 13}, {'id': 1002, 'x': 38, 'y': 14}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:12:59,470:No forbidden lines
+DEBUG:2023-05-22 05:12:59,470:Read data:  data points  [{'id': 1001, 'x': 44, 'y': 14}, {'id': 1002, 'x': 34, 'y': 14}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:14:24,912:No forbidden lines
+DEBUG:2023-05-22 05:14:24,912:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 12}, {'id': 1002, 'x': 34, 'y': 9}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:14:25,185:2023-05-22_05-14-25_test_one_circle.png created
+INFO:2023-05-22 05:14:48,054:No forbidden lines
+DEBUG:2023-05-22 05:14:48,054:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 12}, {'id': 1002, 'x': 34, 'y': 11}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:14:57,528:No forbidden lines
+DEBUG:2023-05-22 05:14:57,529:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 12}, {'id': 1002, 'x': 34, 'y': 10}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 11, 'r': 3}] 
+
+INFO:2023-05-22 05:14:57,798:2023-05-22_05-14-57_test_one_circle.png created
+INFO:2023-05-22 05:15:49,679:No forbidden lines
+DEBUG:2023-05-22 05:15:49,679:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 10}, {'id': 1002, 'x': 34, 'y': 10}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 10, 'r': 3}] 
+
+INFO:2023-05-22 05:16:06,713:No forbidden lines
+DEBUG:2023-05-22 05:16:06,713:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 10.1}, {'id': 1002, 'x': 34, 'y': 10}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 10, 'r': 3}] 
+
+INFO:2023-05-22 05:16:16,058:No forbidden lines
+DEBUG:2023-05-22 05:16:16,058:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 10.1}, {'id': 1002, 'x': 34, 'y': 10.1}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 10, 'r': 3}] 
+
+INFO:2023-05-22 05:16:16,349:2023-05-22_05-16-16_test_one_circle.png created
+INFO:2023-05-22 05:16:45,275:No forbidden lines
+DEBUG:2023-05-22 05:16:45,275:Read data:  data points  [{'id': 1001, 'x': 45, 'y': 10.1}, {'id': 1002, 'x': 34, 'y': 10.1}]  forbidden_lines  []  forbidden_zones  [{'id': 2001, 'x': 40, 'y': 12, 'r': 3}] 
+
+INFO:2023-05-22 05:16:45,539:2023-05-22_05-16-45_test_one_circle.png created

@@ -106,29 +106,46 @@ class Arc(Fragment):
         if d1.y >= c.y:
             alpha = math.degrees(math.acos((d1.x - c.x) / self.r))
         else:
-            alpha = math.degrees(math.acos((d1.x - c.x) / self.r)) +180
+            alpha = 360 -  math.degrees(math.acos((d1.x - c.x) / self.r))
 
         if d2.y >= c.y:
             beta = math.degrees(math.acos((d2.x - c.x) / self.r))
         else:
-            beta =  math.degrees(math.acos((d2.x - c.x )/ self.r)) +180
+            beta =  360 - math.degrees(math.acos((d2.x - c.x )/ self.r))
         if path == 'short':  # TODO shorter comparison
-            if  (alpha + 180) % 360 >= beta: #alpha - beta <= 180
+            if  alpha  <= beta: #alpha - beta <= 180
                 self.alpha = alpha
                 self.beta = beta
             else:
                 self.alpha = beta
                 self.beta = alpha
+            if (abs(self.beta - self.alpha) / 360) < 0.5:
+                self.length = math.pi * 2 * self.r * (abs(self.beta - self.alpha) / 360)
+            else:
+                print('wow!')
+
+                self.length = math.pi * 2 * self.r * (1 - ((abs(self.beta - self.alpha) / 360)))
+                print('wow', self.length, self.alpha, self.beta, (self.beta - self.alpha),
+                      abs(self.beta - self.alpha) / 360)
+                self.alpha,self.beta = self.beta,self.alpha
+
         else:
-            if (alpha + 180) % 360 >= beta:
+            if alpha  <= beta:
                 self.alpha = beta
                 self.beta = alpha
             else:
                 self.alpha = alpha
                 self.beta = beta
+            if (abs(self.beta - self.alpha) / 360) > 0.5:
+                self.length = math.pi * 2 * self.r * (abs(self.beta - self.alpha) / 360)
+            else:
+                self.length = math.pi * 2 * self.r * (1 - ((abs(self.beta - self.alpha) / 360)))
+                self.alpha = beta
+                self.beta = alpha
         #TODO fix lenght calculation
-        self.length = math.pi * 2 * self.r * (angle_in_range(abs(self.beta - self.alpha)) / 360)
-        print('arc-init',self.length, self.alpha, self.beta, (self.beta - self.alpha),(angle_in_range(abs(self.beta - self.alpha)) / 360))
+
+
+        print('arc-init',self.length, self.alpha, self.beta, (self.beta - self.alpha),abs(self.beta - self.alpha) / 360)
 
     def __eq__(self, other):
         if self.d1 == other.d1 and self.d2 == other.d2 and self.c == other.c:
@@ -140,7 +157,7 @@ class Arc(Fragment):
     def draw(self, ax):
         #TODO fix drawing
         ax.add_patch(matplotlib.patches.Arc(xy=(self.c.x, self.c.y), width=self.r * 2, height=self.r * 2,
-                                             theta1=min(self.alpha, self.beta), theta2=max(self.alpha, self.beta), color='b'))
+                                             theta1=self.alpha, theta2= self.beta, color='b'))
 
 class Circle(Fragment):
     def __init__(self,  c: Point, r: int):
@@ -257,26 +274,35 @@ def dodge_fz(line: Line, circ: Circle):
     t21x = circ.r * math.sin(math.atan2(l2y, l2x) - math.asin(circ.r / l2)) + circ.c.x
 
     t21y = circ.r * (-1) * math.cos(math.atan2(l2y, l2x) - math.asin(circ.r / l2)) + circ.c.y
-
+    print('t21',t21x, t21y)
     t22x = circ.r * (-1) * math.sin(math.atan2(l2y, l2x) + math.asin(circ.r / l2)) + circ.c.x
 
     t22y = circ.r * math.cos(math.atan2(l2y, l2x) + math.asin(circ.r / l2)) + circ.c.y
-
+    print('t22', t22x, t22y)
     p1, p2, p3, p4 = Point(t11x, t11y), Point(t12x, t12y), Point(t21x, t21y), Point(t22x, t22y)
-    a1, a2, a3, a4 = Arc(p1, p3, circ.c), Arc(p1, p4, circ.c), Arc(p2, p3, circ.c), Arc(p2, p4, circ.c)
-    if a1.length == min(a1.length, a2.length, a3.length, a4.length):
+    # a1, a2, a3, a4 = Arc(p1, p3, circ.c), Arc(p1, p4, circ.c), Arc(p2, p3, circ.c), Arc(p2, p4, circ.c)
+    # if a1.length == min(a1.length, a2.length, a3.length, a4.length):
+    #     print(1111111111111111)
+    #     #print( p1.args(),a1.d1.args(),a1.d2.args(),p3.args())
+    #     return [Line(line.d1, p1), a1, Line(p3, line.d2)]
+    # if a2.length == min(a1.length, a2.length, a3.length, a4.length):
+    #     print(2222222222222222)
+    #     return [Line(line.d1, p1), a2, Line(p4, line.d2)]
+    # if a3.length == min(a1.length, a2.length, a3.length, a4.length):
+    #     print(3333333333)
+    #     return [Line(line.d1, p2), a3, Line(p3, line.d2)]
+    # if a4.length == min(a1.length, a2.length, a3.length, a4.length):
+    #     print(44444444)
+    #     return [Line(line.d1, p2), a4, Line(p4, line.d2)]
+    # return None
+    a1, a2=  Arc(p1, p4, circ.c), Arc(p2, p3, circ.c)
+    if a1.length == min(a1.length, a2.length):
         print(1111111111111111)
         #print( p1.args(),a1.d1.args(),a1.d2.args(),p3.args())
-        return [Line(line.d1, p1), a1, Line(p3, line.d2)]
-    if a2.length == min(a1.length, a2.length, a3.length, a4.length):
+        return [Line(line.d1, p1), a1, Line(p4, line.d2)]
+    if a2.length == min(a1.length, a2.length):
         print(2222222222222222)
-        return [Line(line.d1, p1), a2, Line(p4, line.d2)]
-    if a3.length == min(a1.length, a2.length, a3.length, a4.length):
-        print(3333333333)
-        return [Line(line.d1, p2), a3, Line(p3, line.d2)]
-    if a4.length == min(a1.length, a2.length, a3.length, a4.length):
-        print(44444444)
-        return [Line(line.d1, p2), a4, Line(p4, line.d2)]
+        return [Line(line.d1, p2), a2, Line(p3, line.d2)]
     return None
 
 
